@@ -1,48 +1,53 @@
-// * Diesel ORM
-pub mod models;
-pub mod schema;
+#![feature(proc_macro_hygiene, decl_macro)]
+
+#[macro_use]
+extern crate rocket;
+#[macro_use]
+extern crate rocket_contrib;
+use rocket_cors;
 
 #[macro_use]
 extern crate diesel;
-extern crate dotenv;
 
-use self::models::{NewPuppy, Puppy};
-use diesel::pg::PgConnection;
-use diesel::prelude::*;
 use dotenv::dotenv;
-use std::env;
 
-// * Establishes a connection to postgres database (or throws error)
-pub fn establish_connection() -> PgConnection {
-    dotenv().ok();
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
+mod config;
+mod db;
+pub mod models;
+mod routes;
+mod schema;
+
+use rocket_contrib::json::JsonValue;
+use rocket_cors::Cors;
+
+#[catch(404)]
+fn not_found() -> JsonValue {
+  json!({
+      "status": "error",
+      "reason": "Resource was not found."
+  })
 }
 
-// * Creates a new puppy in the database with name and breed
-pub fn create_puppy<'a>(conn: &PgConnection, name: &'a str, breed: &'a str) -> Puppy {
-    use schema::puppies;
-    let new_pup = NewPuppy {
-        name: name,
-        breed: breed,
-    };
-
-    diesel::insert_into(puppies::table)
-        .values(&new_pup)
-        .get_result(conn)
-        .expect("Error saving new pup")
+fn cors_fairing() -> Cors {
+  Cors::from_options(&Default::default()).expect("Cors fairing cannot be created")
 }
 
-// * Updates a puppy in the database with new fields
-pub fn update_puppy<'a>(
-    conn: &PgConnection,
-    _id: &'a i32,
-    _name: &'a str,
-    _breed: &'a str,
-) -> Puppy {
-    use schema::puppies::dsl::*;
-    diesel::update(puppies.find(id))
-        .set(name.eq(name))
-        .get_result::<Puppy>(conn)
-        .expect(&format!("Unable to find post {:?}", id))
+pub fn rocket() -> rocket::Rocket {
+  dotenv().ok();
+  rocket::custom(config::from_env())
+    .mount(
+      "/api",
+      routes![
+        routes::puppies::index,
+        routes::puppies::all_puppies,
+        routes::puppies::puppies,
+        routes::puppies::create_puppy,
+        routes::puppies::update_puppy,
+        routes::puppies::delete_puppy
+      ],
+    )
+    .attach(db::Conn::fairing())
+    .attach(cors_fairing())
+    .attach(config::AppState::manage())
+    .register(catchers![not_found])
 }

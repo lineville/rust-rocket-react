@@ -5,7 +5,8 @@ import './App.css'
 function App() {
   return (
     <div className="App">
-      <Puppies message={'Hi pups!'} />
+      <h3>Puppies</h3>
+      <Puppies />
     </div>
   )
 }
