@@ -33,25 +33,50 @@ fn test_create_puppy() {
     }))
     .dispatch();
   let value = response_json_value(response);
+  assert_eq!(value.get("name").unwrap(), "NEWPUPNAME");
+  assert_eq!(value.get("breed").unwrap(), "NEWPUPBREED");
   assert_eq!(response.status(), Status::Ok);
+
+  // * Clean up
+  client
+    .delete(format!("{}/{}", API_PATH, value.get("id").unwrap()))
+    .dispatch();
 }
 
 #[test]
 fn test_update_puppy() {
   let client = test_client();
+  // * Creating a pup to update incase one doesn't exist
+  let new_pup = &mut client
+    .post(API_PATH)
+    .header(ContentType::JSON)
+    .body(json_string!({
+      "name": "pup",
+      "breed": "breed"
+    }))
+    .dispatch();
+
+  let value = response_json_value(new_pup);
+
   let response = &mut client
     .put(API_PATH)
     .header(ContentType::JSON)
     .body(json_string!({
-      "id": 11,
+      "id": value.get("id").unwrap(),
       "name": "NEWPUPNAME",
       "breed": "NEWPUPBREED"
     }))
     .dispatch();
+
   let value = response_json_value(response);
   assert_eq!(value.get("name").unwrap(), "NEWPUPNAME");
   assert_eq!(value.get("breed").unwrap(), "NEWPUPBREED");
   assert_eq!(response.status(), Status::Ok);
+
+  // * Clean up
+  client
+    .delete(format!("{}/{}", API_PATH, value.get("id").unwrap()))
+    .dispatch();
 }
 
 #[test]
