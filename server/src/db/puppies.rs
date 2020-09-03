@@ -26,27 +26,17 @@ pub fn get_puppies_limited(limit: Option<u8>, conn: &PgConnection) -> Vec<Puppy>
 }
 
 // * Creates a new puppy in the database with name and breed
-pub fn create_puppy<'a>(conn: &PgConnection, pup_name: &'a str, pup_breed: &'a str) -> Puppy {
-  let new_pup = NewPuppy {
-    name: pup_name,
-    breed: pup_breed,
-  };
-
+pub fn create_puppy<'a>(conn: &PgConnection, pup: NewPuppy) -> Puppy {
   diesel::insert_into(puppies)
-    .values(&new_pup)
+    .values(&pup)
     .get_result(conn)
     .expect("Error saving new pup")
 }
 
 // * Updates a puppy in the database with new fields
-pub fn update_puppy<'a>(
-  conn: &PgConnection,
-  pup_id: &'a i32,
-  pup_name: &'a str,
-  pup_breed: &'a str,
-) -> Puppy {
-  diesel::update(puppies.filter(id.eq(pup_id)))
-    .set((name.eq(pup_name), breed.eq(pup_breed)))
+pub fn update_puppy<'a>(conn: &PgConnection, pup: Puppy) -> Puppy {
+  diesel::update(puppies.filter(id.eq(pup.id)))
+    .set(pup)
     .get_result::<Puppy>(conn)
     .expect(&format!("Unable to find post {:?}", id))
 }

@@ -8,17 +8,72 @@ const API_PATH: &'static str = "/api/puppies";
 #[test]
 fn test_get_puppies() {
   let client = test_client();
+  // * Creating one pup in db incase it is empty
+  let millie = &mut client
+    .post(API_PATH)
+    .header(ContentType::JSON)
+    .body(json_string!({
+      "name": "Millie",
+      "breed": "Golden",
+      "age": 2
+    }))
+    .dispatch();
   let response = &mut client.get(API_PATH).dispatch();
   let value = response_json_value(response);
   assert_eq!(value.as_array().unwrap().len() > 0, true);
+  // * Clean up
+  client
+    .delete(format!(
+      "{}/{}",
+      API_PATH,
+      response_json_value(millie).get("id").unwrap()
+    ))
+    .dispatch();
 }
 
 #[test]
 fn test_get_puppies_limit() {
   let client = test_client();
+  // * Creating two pups to test that limit works
+  let millie = &mut client
+    .post(API_PATH)
+    .header(ContentType::JSON)
+    .body(json_string!({
+      "name": "Millie",
+      "breed": "Golden",
+      "age": 2
+    }))
+    .dispatch();
+
+  let ella = &mut client
+    .post(API_PATH)
+    .header(ContentType::JSON)
+    .body(json_string!({
+      "name": "Ella",
+      "breed": "Golden Cream",
+      "age": 1
+    }))
+    .dispatch();
+
   let response = &mut client.get(format!("{}/{}", API_PATH, 1)).dispatch();
   let value = response_json_value(response);
   assert_eq!(value.as_array().unwrap().len(), 1);
+
+  // * Clean up
+  client
+    .delete(format!(
+      "{}/{}",
+      API_PATH,
+      response_json_value(millie).get("id").unwrap()
+    ))
+    .dispatch();
+  client
+    .delete(format!(
+      "{}/{}",
+      API_PATH,
+      response_json_value(ella).get("id").unwrap()
+    ))
+    .dispatch();
 }
 
 #[test]
@@ -29,7 +84,8 @@ fn test_create_puppy() {
     .header(ContentType::JSON)
     .body(json_string!({
       "name": "NEWPUPNAME",
-      "breed": "NEWPUPBREED"
+      "breed": "NEWPUPBREED",
+      "age": 2
     }))
     .dispatch();
   let value = response_json_value(response);
@@ -52,7 +108,8 @@ fn test_update_puppy() {
     .header(ContentType::JSON)
     .body(json_string!({
       "name": "pup",
-      "breed": "breed"
+      "breed": "breed",
+      "age": 1
     }))
     .dispatch();
 
@@ -64,13 +121,15 @@ fn test_update_puppy() {
     .body(json_string!({
       "id": value.get("id").unwrap(),
       "name": "NEWPUPNAME",
-      "breed": "NEWPUPBREED"
+      "breed": "NEWPUPBREED",
+      "age": 5
     }))
     .dispatch();
 
   let value = response_json_value(response);
   assert_eq!(value.get("name").unwrap(), "NEWPUPNAME");
   assert_eq!(value.get("breed").unwrap(), "NEWPUPBREED");
+  assert_eq!(value.get("age").unwrap(), 5);
   assert_eq!(response.status(), Status::Ok);
 
   // * Clean up
@@ -88,7 +147,8 @@ fn test_delete_puppy() {
     .header(ContentType::JSON)
     .body(json_string!({
       "name": "NEWPUPNAME",
-      "breed": "NEWPUPBREED"
+      "breed": "NEWPUPBREED",
+      "age": 2
     }))
     .dispatch();
 

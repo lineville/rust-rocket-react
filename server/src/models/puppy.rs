@@ -8,6 +8,7 @@ pub struct Puppy {
   pub id: i32,
   pub name: String,
   pub breed: String,
+  pub age: i32,
 }
 
 #[derive(Insertable, Deserialize)]
@@ -15,4 +16,5 @@ pub struct Puppy {
 pub struct NewPuppy<'a> {
   pub name: &'a str,
   pub breed: &'a str,
+  pub age: i32,
 }

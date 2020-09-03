@@ -1,64 +1,159 @@
 import React, { useState } from 'react'
 import { Puppy } from '../Puppy'
+import { Delete, Edit, Cancel, Check, FileCopy } from '@material-ui/icons'
+import {
+  createStyles,
+  Fab,
+  makeStyles,
+  TableCell,
+  TableRow,
+  TextField,
+  Theme,
+} from '@material-ui/core'
 
 interface PuppyListItemProps {
   puppy: Puppy
   onDelete: (id: number) => Promise<void>
   onUpdate: (pup: Puppy) => Promise<void>
+  onCopy: (pup: Puppy) => Promise<void>
 }
 
 export const PuppyListItem = (props: PuppyListItemProps) => {
-  const { id, name, breed } = props.puppy
+  const { id, name, breed, age } = props.puppy
 
+  const classes = useStyles()
   const [editing, setEditing] = useState(false)
   const [newPupName, setNewPupName] = useState(name)
   const [newPupBreed, setNewPupBreed] = useState(breed)
+  const [newPupAge, setNewPupAge] = useState(age)
 
+  // * Updates the pup
   const savePup = async () => {
-    props.onUpdate({ id, name: newPupName, breed: newPupBreed })
+    props.onUpdate({ id, name: newPupName, breed: newPupBreed, age: newPupAge })
     setEditing(false)
   }
 
+  // * Displays the editable version of the data row
   const editPupRow = () => (
-    <span>
-      <label>Name: </label>
-      <input
-        type="text"
-        value={newPupName}
-        onChange={(e) => setNewPupName(e.target.value)}
-      />
+    <>
+      <TableCell align="right">
+        <TextField
+          id="newPupName"
+          label="Name"
+          inputProps={{
+            onChange: (e) =>
+              setNewPupName((e.target as HTMLInputElement).value),
+            value: newPupName,
+            color: 'primary',
+            size: 'medium',
+          }}
+        />
+      </TableCell>
 
-      <label>Breed: </label>
-      <input
-        type="text"
-        value={newPupBreed}
-        onChange={(e) => setNewPupBreed(e.target.value)}
-      />
-      <button type="button" onClick={savePup}>
-        ✅
-      </button>
-      <button type="button" onClick={() => setEditing(false)}>
-        🚫
-      </button>
-    </span>
+      <TableCell align="right">
+        <TextField
+          id="newPupBreed"
+          label="Breed"
+          inputProps={{
+            onChange: (e) =>
+              setNewPupBreed((e.target as HTMLInputElement).value),
+            value: newPupBreed,
+            color: 'primary',
+            size: 'medium',
+          }}
+        />
+      </TableCell>
+
+      <TableCell align="right">
+        <TextField
+          id="newPupAge"
+          label="Age"
+          type="number"
+          inputProps={{
+            onChange: (e) =>
+              setNewPupAge(parseInt((e.target as HTMLInputElement).value, 10)),
+            value: newPupAge,
+          }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      </TableCell>
+
+      <TableCell align="right">
+        <Fab size="medium" color="primary" aria-label="save" onClick={savePup}>
+          <Check />
+        </Fab>
+
+        <Fab
+          size="medium"
+          color="secondary"
+          aria-label="cancel"
+          onClick={() => setEditing(false)}
+        >
+          <Cancel />
+        </Fab>
+      </TableCell>
+    </>
   )
 
+  // * Displays the static non-editable version of the data row
   const displayPupRow = () => (
-    <span style={{ marginRight: 10 }}>
-      Id: {id} Name: {name} Breed: {breed}
-      <button type="button" onClick={() => setEditing(true)}>
-        ✏️
-      </button>
-    </span>
+    <>
+      <TableCell align="right">{name}</TableCell>
+      <TableCell align="right">{breed}</TableCell>
+      <TableCell align="right">{age}</TableCell>
+      <TableCell align="right">
+        <Fab
+          size="medium"
+          color="primary"
+          aria-label="edit"
+          onClick={() => setEditing(true)}
+        >
+          <Edit />
+        </Fab>
+      </TableCell>
+    </>
   )
 
   return (
-    <li key={id}>
+    <TableRow key={id} className={classes.root}>
+      <TableCell component="th" scope="row">
+        {id}
+      </TableCell>
       {editing ? editPupRow() : displayPupRow()}
 
-      <button type="button" onClick={() => props.onDelete(id)}>
-        🗑️
-      </button>
-    </li>
+      <TableCell align="right">
+        <Fab
+          size="medium"
+          color="default"
+          aria-label="add"
+          onClick={() => props.onCopy(props.puppy)}
+        >
+          <FileCopy />
+        </Fab>
+      </TableCell>
+
+      <TableCell align="right">
+        <Fab
+          size="medium"
+          color="secondary"
+          aria-label="add"
+          onClick={() => props.onDelete(id)}
+        >
+          <Delete />
+        </Fab>
+      </TableCell>
+    </TableRow>
   )
 }
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+  })
+)

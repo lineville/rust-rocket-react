@@ -20,17 +20,12 @@ pub fn puppies(limit: Option<u8>, conn: db::Conn) -> JsonValue {
 
 #[post("/puppies", format = "json", data = "<puppy>")]
 pub fn create_puppy(puppy: Json<NewPuppy>, conn: db::Conn) -> JsonValue {
-  json!(db::puppies::create_puppy(&conn, puppy.name, puppy.breed))
+  json!(db::puppies::create_puppy(&conn, puppy.into_inner()))
 }
 
 #[put("/puppies", format = "json", data = "<puppy>")]
 pub fn update_puppy(puppy: Json<Puppy>, conn: db::Conn) -> JsonValue {
-  json!(db::puppies::update_puppy(
-    &conn,
-    &puppy.id,
-    &puppy.name,
-    &puppy.breed
-  ))
+  json!(db::puppies::update_puppy(&conn, puppy.into_inner()))
 }
 
 #[delete("/puppies/<id>")]
