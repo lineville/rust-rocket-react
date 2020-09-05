@@ -9,6 +9,8 @@ import {
   TableRow,
   TextField,
   Theme,
+  Select,
+  MenuItem,
 } from '@material-ui/core'
 
 interface PuppyListItemProps {
@@ -27,6 +29,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
   const [newPupName, setNewPupName] = useState(name)
   const [newPupBreed, setNewPupBreed] = useState(breed)
   const [newPupAge, setNewPupAge] = useState(age)
+  const [newPupOwner, setNewPupOwner] = useState(owner_id)
 
   // * Updates the pup
   const savePup = async (idx: number) => {
@@ -36,7 +39,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
         name: newPupName,
         breed: newPupBreed,
         age: newPupAge,
-        owner_id: null,
+        owner_id: newPupOwner,
       },
       idx
     )
@@ -88,6 +91,21 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
             shrink: true,
           }}
         />
+      </TableCell>
+
+      <TableCell align="right">
+        <Select
+          labelId="owner-picker"
+          id="demo-simple-select"
+          value={newPupOwner}
+          onChange={(e) =>
+            setNewPupOwner(parseInt((e.target as HTMLInputElement).value, 10))
+          }
+        >
+          <MenuItem value={1}>Liam</MenuItem>
+          <MenuItem value={2}>Linda</MenuItem>
+          <MenuItem value={3}>Mom & Dad</MenuItem>
+        </Select>
       </TableCell>
 
       <TableCell align="right">

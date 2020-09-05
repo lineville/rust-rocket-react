@@ -26,7 +26,7 @@
 
 ```bash
 cd server
-diesel migration run
+diesel setup
 cargo run
 ```
 
