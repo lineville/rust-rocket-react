@@ -13,6 +13,7 @@ use dotenv::dotenv;
 
 mod config;
 mod db;
+mod middleware;
 pub mod models;
 mod routes;
 mod schema;
