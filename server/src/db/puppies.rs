@@ -20,6 +20,7 @@ pub fn get_puppies_limited(limit: Option<u8>, conn: &PgConnection) -> Vec<Puppy>
       Some(limit) => limit.into(),
       None => 20,
     })
+    .order(id.asc())
     .load::<Puppy>(conn)
     .expect("Error loading puppies");
   return results;

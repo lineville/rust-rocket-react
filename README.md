@@ -1,21 +1,21 @@
-## Tech Stack
+# Tech Stack
 
-### Backend
+## Backend
 
 - > Language: 🦀 [Rust](https://www.rust-lang.org/)
 - > Database: 🐘 [PostgreSQL](https://www.postgresql.org/)
 - > ORM: ⛽ [Diesel](http://diesel.rs/)
 - > Web Framework: 🚀 [Rocket](https://rocket.rs/)
 
-### Frontend
+## Frontend
 
 - > Language: 🟦 [TypeScript](https://www.typescriptlang.org/)
 - > Framework: ⚛️ [React](https://reactjs.org/)
 - > UI Framework: [Material UI](https://material-ui.com/)
 
-# Getting started
+---
 
-## Dependencies
+## Getting started
 
 - > Rust + Cargo (Nightly build -- required by Rocket)
 - > Diesel (can be installed using cargo)
@@ -58,7 +58,7 @@ cd client
 yarn test
 ```
 
-**⚡⚡⚡Convert rust models automatically into TypeScript types!⚡⚡⚡**
+### **⚡⚡⚡Convert rust models automatically into TypeScript types!⚡⚡⚡**
 
 Modify the src/bin/typescriptify.rs file to use the model you want to use to convert to TypeScript
 

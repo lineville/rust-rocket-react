@@ -14,8 +14,9 @@ import {
 interface PuppyListItemProps {
   puppy: Puppy
   onDelete: (id: number) => Promise<void>
-  onUpdate: (pup: Puppy) => Promise<void>
+  onUpdate: (pup: Puppy, idx: number) => Promise<void>
   onCopy: (pup: Puppy) => Promise<void>
+  idx: number
 }
 
 export const PuppyListItem = (props: PuppyListItemProps) => {
@@ -28,13 +29,16 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
   const [newPupAge, setNewPupAge] = useState(age)
 
   // * Updates the pup
-  const savePup = async () => {
-    props.onUpdate({ id, name: newPupName, breed: newPupBreed, age: newPupAge })
+  const savePup = async (idx: number) => {
+    await props.onUpdate(
+      { id, name: newPupName, breed: newPupBreed, age: newPupAge },
+      idx
+    )
     setEditing(false)
   }
 
   // * Displays the editable version of the data row
-  const editPupRow = () => (
+  const editPupRow = (idx: number) => (
     <>
       <TableCell align="right">
         <TextField
@@ -81,7 +85,12 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
       </TableCell>
 
       <TableCell align="right">
-        <Fab size="medium" color="primary" aria-label="save" onClick={savePup}>
+        <Fab
+          size="medium"
+          color="primary"
+          aria-label="save"
+          onClick={() => savePup(idx)}
+        >
           <Check />
         </Fab>
 
@@ -121,7 +130,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
       <TableCell component="th" scope="row">
         {id}
       </TableCell>
-      {editing ? editPupRow() : displayPupRow()}
+      {editing ? editPupRow(props.idx) : displayPupRow()}
 
       <TableCell align="right">
         <Fab

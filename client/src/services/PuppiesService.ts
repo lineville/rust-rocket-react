@@ -3,6 +3,7 @@ import { Puppy } from '../Puppy'
 
 const API_PATH = 'http://localhost:8000/api/puppies'
 
+// * Gets all the puppies skipping (skip many) and taking at most (take many)
 export const getPuppies = async (
   take: number,
   skip: number
@@ -11,6 +12,7 @@ export const getPuppies = async (
   return response.data
 }
 
+// * Creates a new puppy with given name, age and breed
 export const createPuppy = async (
   name: string,
   breed: string,

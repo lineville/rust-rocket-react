@@ -3,13 +3,10 @@ use rocket::fairing::AdHoc;
 use std::collections::HashMap;
 use std::env;
 
-/// Debug only secret for JWT encoding & decoding.
+// * Debug only secret for JWT encoding & decoding.
 const SECRET: &'static str = "8Xui8SN4mI+7egV/9dlfYYLGQJeEx4+DwmSQLwDVXJg=";
 
-/// js toISOString() in test suit can't handle chrono's default precision
-// pub const DATE_FORMAT: &'static str = "%Y-%m-%dT%H:%M:%S%.3fZ";
-
-// pub const TOKEN_PREFIX: &'static str = "Token ";
+const PORT: &'static str = "8000";
 
 pub struct AppState {
     pub secret: Vec<u8>,
@@ -34,12 +31,13 @@ impl AppState {
     }
 }
 
-/// Create rocket config from environment variables
+// * Create rocket config from environment variables
+// * Configures port and database pool
 pub fn from_env() -> Config {
     let environment = Environment::active().expect("No environment found");
 
     let port = env::var("PORT")
-        .unwrap_or_else(|_| "8000".to_string())
+        .unwrap_or_else(|_| PORT.to_string())
         .parse::<u16>()
         .expect("PORT environment variable should parse to an integer");
 

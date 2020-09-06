@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Puppy } from '../Puppy'
 import { PuppyListItem } from './PuppyListItem'
 import {
@@ -16,7 +16,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
+  // TablePagination,
   TableRow,
   TextField,
   Typography,
@@ -30,8 +30,8 @@ const Puppies = () => {
   const [newPupName, setNewPupName] = useState('')
   const [newPupBreed, setNewPupBreed] = useState('')
   const [newPupAge, setNewPupAge] = useState(0)
-  const [take, setTake] = useState(20)
-  const [skip, setSkip] = useState(0)
+  const [take] = useState(20) // * Will need the setters for pagination
+  const [skip] = useState(0)
 
   // * Submits the form and calls addPup
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -78,14 +78,14 @@ const Puppies = () => {
   }
 
   // * Gets all the puppies
-  const fetchPuppies = async () => {
+  const fetchPuppies = useCallback(async () => {
     const puppies = await getPuppies(take, skip)
     setPuppies(puppies)
-  }
+  }, [skip, take])
 
   useEffect(() => {
     fetchPuppies()
-  }, [])
+  }, [fetchPuppies])
 
   // * Displays a new puppy form
   const newPupForm = () => (
@@ -152,8 +152,9 @@ const Puppies = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {puppies.map((pup: Puppy) => (
+          {puppies.map((pup: Puppy, idx: number) => (
             <PuppyListItem
+              idx={idx}
               puppy={pup}
               onDelete={deletePup}
               onUpdate={updatePup}

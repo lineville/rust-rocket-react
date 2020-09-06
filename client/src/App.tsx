@@ -1,5 +1,5 @@
 import React from 'react'
-import Puppies from './components/Puppies'
+import Puppies from './components/PuppiesTable'
 import './App.css'
 
 function App() {

@@ -20,6 +20,7 @@ mod schema;
 use rocket_contrib::json::JsonValue;
 use rocket_cors::Cors;
 
+// * Hitting the server directly will give a 404 (all routes are under /api)
 #[catch(404)]
 fn not_found() -> JsonValue {
   json!({
@@ -28,10 +29,12 @@ fn not_found() -> JsonValue {
   })
 }
 
+// * Handles CORS config so that server and client can communicate
 fn cors_fairing() -> Cors {
   Cors::from_options(&Default::default()).expect("Cors fairing cannot be created")
 }
 
+// * Launch point for the rocket web server
 pub fn rocket() -> rocket::Rocket {
   dotenv().ok();
   rocket::custom(config::from_env())
