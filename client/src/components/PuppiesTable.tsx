@@ -65,9 +65,11 @@ const Puppies = () => {
   }
 
   // * Updates the pup with new name and breed
-  const updatePup = async (pup: Puppy) => {
+  const updatePup = async (pup: Puppy, idx: number) => {
     const updatedPup = await updatePuppy(pup)
-    setPuppies([...puppies.filter((p: Puppy) => p.id !== pup.id), updatedPup])
+    let modifiedPups = [...puppies]
+    modifiedPups[idx] = updatedPup
+    setPuppies(modifiedPups)
   }
 
   // * Deletes pup with the given id
