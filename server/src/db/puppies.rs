@@ -13,17 +13,24 @@ pub fn get_puppies(conn: &PgConnection) -> Vec<Puppy> {
   return results;
 }
 
-// * Gets all the puppies, limited amount or default 20
-pub fn get_puppies_limited(limit: Option<u8>, conn: &PgConnection) -> Vec<Puppy> {
+// * Gets all puppies with skip and take
+pub fn get_puppies_paginated(skip: u32, take: u32, conn: &PgConnection) -> Vec<Puppy> {
   let results = puppies
-    .limit(match limit {
-      Some(limit) => limit.into(),
-      None => 20,
-    })
     .order(id.asc())
+    .limit(take.into())
+    .offset((skip * take).into())
     .load::<Puppy>(conn)
     .expect("Error loading puppies");
   return results;
+}
+
+// * Gets all the puppies, limited amount or default 20
+pub fn get_puppy(pup_id: i32, conn: &PgConnection) -> Puppy {
+  let result = puppies
+    .find(pup_id)
+    .first::<Puppy>(conn)
+    .expect("Error loading puppy");
+  return result;
 }
 
 // * Creates a new puppy in the database with name and breed

@@ -8,7 +8,12 @@ export const getPuppies = async (
   take: number,
   skip: number
 ): Promise<Array<Puppy>> => {
-  const response = await axios.get(`${API_PATH}/${take}`)
+  const response = await axios.get(API_PATH, {
+    params: {
+      skip,
+      take,
+    },
+  })
   return response.data
 }
 

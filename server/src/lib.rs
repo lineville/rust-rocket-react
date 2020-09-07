@@ -44,6 +44,7 @@ pub fn rocket() -> rocket::Rocket {
       routes![
         routes::puppies::index,
         routes::puppies::all_puppies,
+        routes::puppies::puppies_paginated,
         routes::puppies::puppies,
         routes::puppies::create_puppy,
         routes::puppies::update_puppy,

@@ -14,9 +14,13 @@ pub fn get_puppies(conn: &PgConnection) -> Vec<Puppy> {
   db::puppies::get_puppies(conn)
 }
 
-// * Gets all the puppies, limited amount or default 20
-pub fn get_puppies_limited(limit: Option<u8>, conn: &PgConnection) -> Vec<Puppy> {
-  db::puppies::get_puppies_limited(limit, conn)
+pub fn get_puppies_paginated(skip: u32, take: u32, conn: &PgConnection) -> Vec<Puppy> {
+  db::puppies::get_puppies_paginated(skip, take, conn)
+}
+
+// * Gets puppy with the given id
+pub fn get_puppy(id: i32, conn: &PgConnection) -> Puppy {
+  db::puppies::get_puppy(id, conn)
 }
 
 // * Creates a new puppy in the database with name and breed

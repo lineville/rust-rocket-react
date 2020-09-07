@@ -14,9 +14,16 @@ pub fn all_puppies(conn: db::Conn) -> JsonValue {
   json!(middleware::puppies::get_puppies(&conn))
 }
 
-#[get("/puppies/<limit>")]
-pub fn puppies(limit: Option<u8>, conn: db::Conn) -> JsonValue {
-  json!(middleware::puppies::get_puppies_limited(limit, &conn))
+#[get("/puppies?<skip>&<take>")]
+pub fn puppies_paginated(skip: u32, take: u32, conn: db::Conn) -> JsonValue {
+  json!(middleware::puppies::get_puppies_paginated(
+    skip, take, &conn
+  ))
+}
+
+#[get("/puppies/<id>")]
+pub fn puppies(id: i32, conn: db::Conn) -> JsonValue {
+  json!(middleware::puppies::get_puppy(id, &conn))
 }
 
 #[post("/puppies", format = "json", data = "<puppy>")]

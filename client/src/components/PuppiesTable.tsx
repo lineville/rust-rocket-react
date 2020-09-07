@@ -8,7 +8,6 @@ import {
   getPuppies,
 } from '../services/PuppiesService'
 import {
-  Button,
   Container,
   Paper,
   Table,
@@ -16,13 +15,14 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  // TablePagination,
+  TablePagination,
   TableRow,
   TextField,
   Typography,
+  Fab,
 } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { Add } from '@material-ui/icons'
 
 const Puppies = () => {
   const classes = useStyles()
@@ -30,25 +30,24 @@ const Puppies = () => {
   const [newPupName, setNewPupName] = useState('')
   const [newPupBreed, setNewPupBreed] = useState('')
   const [newPupAge, setNewPupAge] = useState(0)
-  const [take] = useState(20) // * Will need the setters for pagination
-  const [skip] = useState(0)
+  const [take, setTake] = useState(5)
+  const [skip, setSkip] = useState(0)
+
+  // * Gets all the puppies
+  const fetchPuppies = useCallback(async () => {
+    const puppies = await getPuppies(take, skip)
+    setPuppies(puppies)
+  }, [skip, take])
+
+  useEffect(() => {
+    fetchPuppies()
+  }, [fetchPuppies])
 
   // * Submits the form and calls addPup
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     await addPup()
   }
-
-  // const handleChangePage = (event: unknown, page: number) => {
-  //   setSkip(page)
-  // }
-
-  // const handleChangeRowsPerPage = async (
-  //   event: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   setTake(parseInt(event.target.value, 10))
-  //   setSkip(0)
-  // }
 
   // * Adds a new pup
   const addPup = async () => {
@@ -77,15 +76,7 @@ const Puppies = () => {
     setPuppies([...puppies, copiedPuppy])
   }
 
-  // * Gets all the puppies
-  const fetchPuppies = useCallback(async () => {
-    const puppies = await getPuppies(take, skip)
-    setPuppies(puppies)
-  }, [skip, take])
-
-  useEffect(() => {
-    fetchPuppies()
-  }, [fetchPuppies])
+  // * --------------------- RENDER FUNCTIONS --------------------
 
   // * Displays a new puppy form
   const newPupForm = () => (
@@ -126,14 +117,9 @@ const Puppies = () => {
         }}
       />
 
-      <Button
-        variant="contained"
-        color="primary"
-        endIcon={<AddIcon />}
-        onClick={addPup}
-      >
-        Add Pup!
-      </Button>
+      <Fab size="medium" color="primary" aria-label="add" onClick={addPup}>
+        <Add />
+      </Fab>
     </form>
   )
 
@@ -164,24 +150,29 @@ const Puppies = () => {
         </TableBody>
       </Table>
 
-      {/* TODO FIXME PAGINATION */}
-      {/* <TablePagination
-        rowsPerPageOptions={[20, 30, 40]}
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20]}
         component="div"
-        count={puppies.length}
+        count={-1}
         rowsPerPage={take}
         page={skip}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      /> */}
+        onChangePage={(_event, page) => setSkip(page)}
+        onChangeRowsPerPage={(event) =>
+          setTake(parseInt(event.target.value, 10))
+        }
+      />
     </TableContainer>
+  )
+
+  const puppiesHeader = () => (
+    <Typography variant="h3" component="h2" gutterBottom>
+      Puppies
+    </Typography>
   )
 
   return (
     <Container>
-      <Typography variant="h3" component="h2" gutterBottom>
-        Puppies
-      </Typography>
+      {puppiesHeader()}
       {newPupForm()}
       {puppyTable()}
     </Container>
@@ -193,7 +184,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '25ch',
       },
     },
     table: {

@@ -32,10 +32,22 @@ fn test_get_puppies() {
 }
 
 #[test]
-fn test_get_puppies_limit() {
+fn test_get_puppies_paginated() {
   let client = test_client();
-  // * Creating two pups to test that limit works
-  let millie = &mut client
+  let skip = 0;
+  let take = 3;
+  let response = &mut client
+    .get(format!("{}?skip={}&take={}", API_PATH, skip, take))
+    .dispatch();
+  let value = response_json_value(response);
+  assert_eq!(value.as_array().unwrap().len(), 3);
+}
+
+#[test]
+fn test_get_puppy() {
+  let client = test_client();
+  // * Creating one pup to make sure it can be fetched
+  let response = &mut client
     .post(API_PATH)
     .header(ContentType::JSON)
     .body(json_string!({
@@ -45,34 +57,18 @@ fn test_get_puppies_limit() {
     }))
     .dispatch();
 
-  let ella = &mut client
-    .post(API_PATH)
-    .header(ContentType::JSON)
-    .body(json_string!({
-      "name": "Ella",
-      "breed": "Golden Cream",
-      "age": 1
-    }))
-    .dispatch();
+  let millie = response_json_value(response);
 
-  let response = &mut client.get(format!("{}/{}", API_PATH, 1)).dispatch();
+  // * Try to fetch the one with the id we just created
+  let response = &mut client
+    .get(format!("{}/{}", API_PATH, millie.get("id").unwrap()))
+    .dispatch();
   let value = response_json_value(response);
-  assert_eq!(value.as_array().unwrap().len(), 1);
+  assert_eq!(value.get("id"), millie.get("id"));
 
   // * Clean up
   client
-    .delete(format!(
-      "{}/{}",
-      API_PATH,
-      response_json_value(millie).get("id").unwrap()
-    ))
-    .dispatch();
-  client
-    .delete(format!(
-      "{}/{}",
-      API_PATH,
-      response_json_value(ella).get("id").unwrap()
-    ))
+    .delete(format!("{}/{}", API_PATH, value.get("id").unwrap()))
     .dispatch();
 }
 
