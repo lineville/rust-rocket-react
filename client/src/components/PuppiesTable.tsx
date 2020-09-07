@@ -137,8 +137,10 @@ const Puppies = () => {
   const tableHeadings = () => (
     <TableHead>
       <TableRow>
-        {headings?.map((heading: string) => (
-          <TableCell align="right">{heading}</TableCell>
+        {headings?.map((heading: string, idx: number) => (
+          <TableCell key={idx} align="right">
+            {heading}
+          </TableCell>
         ))}
       </TableRow>
     </TableHead>
