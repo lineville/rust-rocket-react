@@ -32,6 +32,8 @@ const Puppies = () => {
   const [newPupAge, setNewPupAge] = useState(0)
   const [take, setTake] = useState(5)
   const [skip, setSkip] = useState(0)
+  const pageSizeOptions = [5, 10, 20, 40]
+  const headings = ['Id', 'Name', 'Breed', 'Age', 'Edit', 'Copy', 'Delete']
 
   // * Gets all the puppies
   const fetchPuppies = useCallback(async () => {
@@ -131,45 +133,54 @@ const Puppies = () => {
     </form>
   )
 
+  // * Table headings
+  const tableHeadings = () => (
+    <TableHead>
+      <TableRow>
+        {headings?.map((heading: string) => (
+          <TableCell align="right">{heading}</TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  )
+
+  // * Table body of rows
+  const tableBody = () => (
+    <TableBody>
+      {puppies.map((pup: Puppy, idx: number) => (
+        <PuppyListItem
+          key={pup.id}
+          idx={idx}
+          puppy={pup}
+          onDelete={deletePup}
+          onUpdate={updatePup}
+          onCopy={copyPup}
+        />
+      ))}
+    </TableBody>
+  )
+
+  // * Pagination footer
+  const tableFooter = () => (
+    <TablePagination
+      rowsPerPageOptions={pageSizeOptions}
+      component="div"
+      count={-1}
+      rowsPerPage={take}
+      page={skip}
+      onChangePage={(_event, page) => setSkip(page)}
+      onChangeRowsPerPage={(event) => setTake(parseInt(event.target.value, 10))}
+    />
+  )
+
+  // * Displays the table of puppies
   const puppyTable = () => (
     <TableContainer component={Paper}>
       <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Id</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Breed</TableCell>
-            <TableCell align="right">Age</TableCell>
-            <TableCell align="right">Edit</TableCell>
-            <TableCell align="right">Copy</TableCell>
-            <TableCell align="right">Delete</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {puppies.map((pup: Puppy, idx: number) => (
-            <PuppyListItem
-              key={pup.id}
-              idx={idx}
-              puppy={pup}
-              onDelete={deletePup}
-              onUpdate={updatePup}
-              onCopy={copyPup}
-            />
-          ))}
-        </TableBody>
+        {tableHeadings()}
+        {tableBody()}
       </Table>
-
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 20]}
-        component="div"
-        count={-1}
-        rowsPerPage={take}
-        page={skip}
-        onChangePage={(_event, page) => setSkip(page)}
-        onChangeRowsPerPage={(event) =>
-          setTake(parseInt(event.target.value, 10))
-        }
-      />
+      {tableFooter()}
     </TableContainer>
   )
 
