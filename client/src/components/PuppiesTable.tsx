@@ -51,7 +51,11 @@ const Puppies = () => {
 
   // * Adds a new pup
   const addPup = async () => {
-    const newPup = await createPuppy(newPupName, newPupBreed, newPupAge)
+    const newPup = await createPuppy({
+      name: newPupName,
+      breed: newPupBreed,
+      age: newPupAge,
+    })
     setNewPupBreed('')
     setNewPupName('')
     setNewPupAge(0)
@@ -72,7 +76,11 @@ const Puppies = () => {
 
   // * Copies pup and creates a new one
   const copyPup = async (pup: Puppy) => {
-    const copiedPuppy = await createPuppy(pup.name, pup.breed, pup.age)
+    const copiedPuppy = await createPuppy({
+      name: pup.name,
+      breed: pup.breed,
+      age: pup.age,
+    })
     setPuppies([...puppies, copiedPuppy])
   }
 
