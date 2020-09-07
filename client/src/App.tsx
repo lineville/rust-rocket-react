@@ -1,12 +1,16 @@
 import React from 'react'
 import Puppies from './components/PuppiesTable'
 import './App.css'
+import { ThemeProvider } from '@material-ui/core'
+import theme from './Theme'
 
 function App() {
   return (
-    <div className="App">
-      <Puppies />
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Puppies />
+      </div>
+    </ThemeProvider>
   )
 }
 

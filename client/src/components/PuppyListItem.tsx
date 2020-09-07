@@ -86,7 +86,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
 
       <TableCell align="right">
         <Fab
-          size="medium"
+          size="small"
           color="primary"
           aria-label="save"
           onClick={() => savePup(idx)}
@@ -94,8 +94,10 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
           <Check />
         </Fab>
 
+        <span>&nbsp;&nbsp;&nbsp;</span>
+
         <Fab
-          size="medium"
+          size="small"
           color="secondary"
           aria-label="cancel"
           onClick={() => setEditing(false)}
@@ -114,7 +116,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
       <TableCell align="right">{age}</TableCell>
       <TableCell align="right">
         <Fab
-          size="medium"
+          size="small"
           color="primary"
           aria-label="edit"
           onClick={() => setEditing(true)}
@@ -134,7 +136,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
 
       <TableCell align="right">
         <Fab
-          size="medium"
+          size="small"
           color="default"
           aria-label="add"
           onClick={() => props.onCopy(props.puppy)}
@@ -145,7 +147,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
 
       <TableCell align="right">
         <Fab
-          size="medium"
+          size="small"
           color="secondary"
           aria-label="add"
           onClick={() => props.onDelete(id)}

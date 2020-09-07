@@ -3,11 +3,9 @@
 // * Main business logic should occur here so that routes can simply handle routing to here
 // * and the data access layer can be simply diesel conversions to db queries
 
-use diesel::pg::PgConnection;
-
-use crate::models::puppy::{NewPuppy, Puppy};
-
 use crate::db;
+use crate::models::puppy::{NewPuppy, Puppy};
+use diesel::pg::PgConnection;
 
 // * Gets all the puppies
 pub fn get_puppies(conn: &PgConnection) -> Vec<Puppy> {

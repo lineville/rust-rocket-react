@@ -125,7 +125,7 @@ const Puppies = () => {
 
   const puppyTable = () => (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Id</TableCell>
@@ -140,6 +140,7 @@ const Puppies = () => {
         <TableBody>
           {puppies.map((pup: Puppy, idx: number) => (
             <PuppyListItem
+              key={pup.id}
               idx={idx}
               puppy={pup}
               onDelete={deletePup}
@@ -185,9 +186,6 @@ const useStyles = makeStyles((theme: Theme) =>
       '& > *': {
         margin: theme.spacing(1),
       },
-    },
-    table: {
-      minWidth: 650,
     },
   })
 )

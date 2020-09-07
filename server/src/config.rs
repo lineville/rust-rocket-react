@@ -1,5 +1,6 @@
 use rocket::config::{Config, Environment, Value};
 use rocket::fairing::AdHoc;
+use rocket_cors::Cors;
 use std::collections::HashMap;
 use std::env;
 
@@ -29,6 +30,11 @@ impl AppState {
             }))
         })
     }
+}
+
+// * Handles CORS config so that server and client can communicate
+pub fn cors_fairing() -> Cors {
+    Cors::from_options(&Default::default()).expect("Cors fairing cannot be created")
 }
 
 // * Create rocket config from environment variables

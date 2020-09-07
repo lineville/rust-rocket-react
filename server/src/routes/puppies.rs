@@ -1,8 +1,7 @@
-use crate::models::puppy::{NewPuppy, Puppy};
-use rocket_contrib::json::{Json, JsonValue};
-
 use crate::db;
 use crate::middleware;
+use crate::models::puppy::{NewPuppy, Puppy};
+use rocket_contrib::json::{Json, JsonValue};
 
 #[get("/")]
 pub fn index() -> &'static str {
@@ -39,4 +38,13 @@ pub fn update_puppy(puppy: Json<Puppy>, conn: db::Conn) -> JsonValue {
 #[delete("/puppies/<id>")]
 pub fn delete_puppy(id: i32, conn: db::Conn) -> JsonValue {
   json!({ "success": middleware::puppies::delete_puppy(&conn, &id) })
+}
+
+// * Hitting the server directly will give a 404 (all routes are under /api)
+#[catch(404)]
+pub fn not_found() -> JsonValue {
+  json!({
+      "status": "error",
+      "reason": "Resource was not found."
+  })
 }

@@ -1,3 +1,4 @@
+use rust_web_app::models::puppy::Puppy;
 use typescript_definitions::TypeScriptifyTrait;
 
 // * Usage:
@@ -6,6 +7,6 @@ use typescript_definitions::TypeScriptifyTrait;
 fn main() {
   if cfg!(any(debug_assertions, feature = "export-typescript")) {
     // * CHANGE the model for different usage
-    println!("{}", rust_web_app::models::puppy::Puppy::type_script_ify());
+    println!("{}", Puppy::type_script_ify());
   };
 }

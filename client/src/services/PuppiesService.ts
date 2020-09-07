@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Puppy } from '../Puppy'
 
-const API_PATH = 'http://localhost:8000/api/puppies'
+const API_PATH = process.env.API_PATH || 'http://localhost:8000/api/puppies'
 
 // * Gets all the puppies skipping (skip many) and taking at most (take many)
 export const getPuppies = async (
