@@ -12,6 +12,7 @@ pub fn get_puppies(conn: &PgConnection) -> Vec<Puppy> {
   db::puppies::get_puppies(conn)
 }
 
+// * Get puppies with a skip (offset) and take (limit)
 pub fn get_puppies_paginated(skip: u32, take: u32, conn: &PgConnection) -> Vec<Puppy> {
   db::puppies::get_puppies_paginated(skip, take, conn)
 }

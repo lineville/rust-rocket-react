@@ -1,12 +1,12 @@
-use rust_web_app::models::puppy::Puppy;
+use rust_web_app::models::puppy::NewPuppy;
 use typescript_definitions::TypeScriptifyTrait;
 
 // * Usage:
-// * First, modify the model to be whichever model we are trying to convert to TS
-// * cargo run --bin typescriptify > ../client/src/<MODELNAME>.d.ts
+// * - Modify the model being imported to be whichever model you'd like to 'typescriptify'
+// * cargo run --bin typescriptify > ../client/src/<YOUR_MODEL>.d.ts
 fn main() {
   if cfg!(any(debug_assertions, feature = "export-typescript")) {
-    // * CHANGE the model for different usage
-    println!("{}", Puppy::type_script_ify());
+    // * CHANGE NewPuppy to YOUR_MODEL
+    println!("{}", NewPuppy::type_script_ify());
   };
 }

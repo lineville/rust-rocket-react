@@ -12,19 +12,18 @@ use dotenv::dotenv;
 
 mod config;
 mod db;
-mod middleware;
+mod logic;
 pub mod models;
 mod routes;
 mod schema;
 
-// * Launch point for the rocket web server
+// * Wire up the config, mount all the endpoints, attach fairings and verify environment
 pub fn rocket() -> rocket::Rocket {
   dotenv().ok();
   rocket::custom(config::from_env())
     .mount(
       "/api",
       routes![
-        routes::puppies::index,
         routes::puppies::all_puppies,
         routes::puppies::puppies_paginated,
         routes::puppies::puppies,

@@ -11,7 +11,7 @@ pub struct Puppy {
   pub age: i32,
 }
 
-#[derive(Insertable, Deserialize)]
+#[derive(Insertable, Deserialize, TypeScriptify)]
 #[table_name = "puppies"]
 pub struct NewPuppy<'a> {
   pub name: &'a str,

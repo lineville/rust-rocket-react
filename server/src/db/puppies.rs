@@ -24,7 +24,7 @@ pub fn get_puppies_paginated(skip: u32, take: u32, conn: &PgConnection) -> Vec<P
   return results;
 }
 
-// * Gets all the puppies, limited amount or default 20
+// * Gets the puppy with the given id
 pub fn get_puppy(pup_id: i32, conn: &PgConnection) -> Puppy {
   let result = puppies
     .find(pup_id)
@@ -49,7 +49,7 @@ pub fn update_puppy<'a>(conn: &PgConnection, pup: Puppy) -> Puppy {
     .expect(&format!("Unable to find post {:?}", id))
 }
 
-// * Deletes a puppy with the given id (maybe change output type)
+// * Deletes a puppy with the given id and returns boolean success value
 pub fn delete_puppy<'a>(conn: &PgConnection, pup_id: &'a i32) -> bool {
   let deleted_puppy = diesel::delete(puppies.filter(id.eq(pup_id))).get_result::<Puppy>(conn);
 

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Puppy } from '../Puppy'
+import { NewPuppy } from '../NewPuppy'
 
 const API_PATH = process.env.API_PATH || 'http://localhost:8000/api/puppies'
 
@@ -8,22 +9,19 @@ export const getPuppies = async (
   take: number,
   skip: number
 ): Promise<Array<Puppy>> => {
-  const response = await axios.get(API_PATH, {
-    params: {
-      skip,
-      take,
-    },
-  })
+  const response = await axios.get(API_PATH, { params: { skip, take } })
+  return response.data
+}
+
+// * Gets the puppy with the given id
+export const getPuppy = async (id: number): Promise<Puppy> => {
+  const response = await axios.get(`${API_PATH}/${id}`)
   return response.data
 }
 
 // * Creates a new puppy with given name, age and breed
-export const createPuppy = async (
-  name: string,
-  breed: string,
-  age: number
-): Promise<Puppy> => {
-  const response = await axios.post(API_PATH, { name, breed, age })
+export const createPuppy = async (pup: NewPuppy): Promise<Puppy> => {
+  const response = await axios.post(API_PATH, pup)
   return response.data
 }
 
