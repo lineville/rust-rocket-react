@@ -19,7 +19,12 @@ const NewPuppyForm = (props: NewPuppyFormProps) => {
   // * Submits the form and calls addPup
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    await props.addPup({ name: newPupName, breed: newPupBreed, age: newPupAge })
+    await props.addPup({
+      name: newPupName,
+      breed: newPupBreed,
+      age: newPupAge,
+      owner_id: null,
+    })
     setNewPupBreed('')
     setNewPupName('')
     setNewPupAge(0)

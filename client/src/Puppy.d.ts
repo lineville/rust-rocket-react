@@ -1,1 +1,7 @@
-export type Puppy = { id: number; name: string; breed: string; age: number };
+export type Puppy = {
+  id: number
+  name: string
+  breed: string
+  age: number
+  owner_id: number | null
+}

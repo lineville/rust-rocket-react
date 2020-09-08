@@ -11,8 +11,9 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 ADD . ./
 
-# RUN cargo install diesel_cli --no-default-features --features postgres
-# RUN diesel migration run
+RUN cargo install diesel_cli --no-default-features --features postgres
+RUN diesel setup --database-url='postgres://lineville:Bazel2()@localhost/puppies'
+RUN diesel migration run
 RUN cargo build --release --bin main
 
 FROM debian:jessie

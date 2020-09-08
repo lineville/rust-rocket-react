@@ -64,6 +64,7 @@ const Puppies = () => {
       name: pup.name,
       breed: pup.breed,
       age: pup.age,
+      owner_id: pup.owner_id,
     })
     setPuppies([...puppies, copiedPuppy])
   }

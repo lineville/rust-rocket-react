@@ -20,7 +20,7 @@ interface PuppyListItemProps {
 }
 
 export const PuppyListItem = (props: PuppyListItemProps) => {
-  const { id, name, breed, age } = props.puppy
+  const { id, name, breed, age, owner_id } = props.puppy
 
   const classes = useStyles()
   const [editing, setEditing] = useState(false)
@@ -31,7 +31,13 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
   // * Updates the pup
   const savePup = async (idx: number) => {
     await props.onUpdate(
-      { id, name: newPupName, breed: newPupBreed, age: newPupAge },
+      {
+        id,
+        name: newPupName,
+        breed: newPupBreed,
+        age: newPupAge,
+        owner_id: null,
+      },
       idx
     )
     setEditing(false)
@@ -114,6 +120,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
       <TableCell align="right">{name}</TableCell>
       <TableCell align="right">{breed}</TableCell>
       <TableCell align="right">{age}</TableCell>
+      <TableCell align="right">{owner_id}</TableCell>
       <TableCell align="right">
         <Fab
           size="small"
