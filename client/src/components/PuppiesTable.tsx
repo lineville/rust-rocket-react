@@ -17,23 +17,16 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Typography,
-  Fab,
 } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { Add } from '@material-ui/icons'
+import NewPuppyForm from './NewPuppyForm'
+import { NewPuppy } from '../NewPuppy'
+import { pageSizeOptions, headings } from '../constants/Puppies'
 
 const Puppies = () => {
-  const classes = useStyles()
   const [puppies, setPuppies] = useState<Array<Puppy>>([])
-  const [newPupName, setNewPupName] = useState('')
-  const [newPupBreed, setNewPupBreed] = useState('')
-  const [newPupAge, setNewPupAge] = useState(0)
-  const [take, setTake] = useState(5)
+  const [take, setTake] = useState(10)
   const [skip, setSkip] = useState(0)
-  const pageSizeOptions = [5, 10, 20, 40]
-  const headings = ['Id', 'Name', 'Breed', 'Age', 'Edit', 'Copy', 'Delete']
 
   // * Gets all the puppies
   const fetchPuppies = useCallback(async () => {
@@ -45,22 +38,9 @@ const Puppies = () => {
     fetchPuppies()
   }, [fetchPuppies])
 
-  // * Submits the form and calls addPup
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    await addPup()
-  }
-
   // * Adds a new pup
-  const addPup = async () => {
-    const newPup = await createPuppy({
-      name: newPupName,
-      breed: newPupBreed,
-      age: newPupAge,
-    })
-    setNewPupBreed('')
-    setNewPupName('')
-    setNewPupAge(0)
+  const addPup = async (pup: NewPuppy) => {
+    const newPup = await createPuppy(pup)
     setPuppies([...puppies, newPup])
   }
 
@@ -89,51 +69,6 @@ const Puppies = () => {
   }
 
   // * --------------------- RENDER FUNCTIONS --------------------
-
-  // * Displays a new puppy form
-  const newPupForm = () => (
-    <form onSubmit={handleSubmit} className={classes.root}>
-      <TextField
-        id="newPupName"
-        label="Name"
-        inputProps={{
-          onChange: (e) => setNewPupName((e.target as HTMLInputElement).value),
-          value: newPupName,
-          color: 'primary',
-          size: 'medium',
-        }}
-      />
-
-      <TextField
-        id="newPupBreed"
-        label="Breed"
-        inputProps={{
-          onChange: (e) => setNewPupBreed((e.target as HTMLInputElement).value),
-          value: newPupBreed,
-          color: 'primary',
-          size: 'medium',
-        }}
-      />
-
-      <TextField
-        id="newPupAge"
-        label="Age"
-        type="number"
-        inputProps={{
-          onChange: (e) =>
-            setNewPupAge(parseInt((e.target as HTMLInputElement).value, 10)),
-          value: newPupAge,
-        }}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
-
-      <Fab size="medium" color="primary" aria-label="add" onClick={addPup}>
-        <Add />
-      </Fab>
-    </form>
-  )
 
   // * Table headings
   const tableHeadings = () => (
@@ -197,20 +132,10 @@ const Puppies = () => {
   return (
     <Container>
       {puppiesHeader()}
-      {newPupForm()}
+      <NewPuppyForm addPup={addPup} />
       {puppyTable()}
     </Container>
   )
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-  })
-)
 
 export default Puppies
