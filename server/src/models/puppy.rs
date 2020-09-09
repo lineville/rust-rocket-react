@@ -4,7 +4,7 @@ use serde_derive::{Deserialize, Serialize};
 use typescript_definitions::TypeScriptify;
 
 #[derive(
-  Queryable, Identifiable, AsChangeset, Serialize, Deserialize, TypeScriptify, Associations,
+  Queryable, Identifiable, AsChangeset, Serialize, Deserialize, TypeScriptify, Associations, Clone,
 )]
 #[belongs_to(Owner)]
 #[table_name = "puppies"]

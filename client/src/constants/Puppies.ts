@@ -1,4 +1,4 @@
-export const pageSizeOptions = [5, 10, 20, 40]
+export const pageSizeOptions = [5, 10, 15, 30]
 export const headings = [
   'Id',
   'Name',

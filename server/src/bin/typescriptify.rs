@@ -1,4 +1,4 @@
-use rust_web_app::models::puppy::Puppy;
+use rust_web_app::models::owner::Owner;
 use typescript_definitions::TypeScriptifyTrait;
 
 // * Usage:
@@ -6,7 +6,7 @@ use typescript_definitions::TypeScriptifyTrait;
 // * cargo run --bin typescriptify > ../client/src/<YOUR_MODEL>.d.ts
 fn main() {
   if cfg!(any(debug_assertions, feature = "export-typescript")) {
-    // * CHANGE Puppy to YOUR_MODEL
-    println!("{}", Puppy::type_script_ify());
+    // * CHANGE Owner to YOUR_MODEL
+    println!("{}", Owner::type_script_ify());
   };
 }

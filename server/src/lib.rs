@@ -31,7 +31,8 @@ pub fn rocket() -> rocket::Rocket {
         routes::puppies::update_puppy,
         routes::puppies::delete_puppy,
         routes::owners::get_owners,
-        routes::owners::create_owner
+        routes::owners::get_owners_and_puppies,
+        routes::owners::create_owner,
       ],
     )
     .attach(db::Conn::fairing())

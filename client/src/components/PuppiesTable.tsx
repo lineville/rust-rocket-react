@@ -28,7 +28,7 @@ const Puppies = () => {
   const [take, setTake] = useState(10)
   const [skip, setSkip] = useState(0)
 
-  // * Gets all the puppies
+  // * Gets all the puppies asynchronously whenever skip or take is modified
   const fetchPuppies = useCallback(async () => {
     const puppies = await getPuppies(take, skip)
     setPuppies(puppies)
@@ -44,7 +44,7 @@ const Puppies = () => {
     setPuppies([...puppies, newPup])
   }
 
-  // * Updates the pup with new name and breed
+  // * Updates the pup with new name and breed (we use the index to keep the ui ordering consistent)
   const updatePup = async (pup: Puppy, idx: number) => {
     const updatedPup = await updatePuppy(pup)
     let modifiedPups = [...puppies]
@@ -59,13 +59,8 @@ const Puppies = () => {
   }
 
   // * Copies pup and creates a new one
-  const copyPup = async (pup: Puppy) => {
-    const copiedPuppy = await createPuppy({
-      name: pup.name,
-      breed: pup.breed,
-      age: pup.age,
-      owner_id: pup.owner_id,
-    })
+  const copyPup = async ({ name, breed, age, owner_id }: Puppy) => {
+    const copiedPuppy = await createPuppy({ name, breed, age, owner_id })
     setPuppies([...puppies, copiedPuppy])
   }
 
@@ -125,7 +120,7 @@ const Puppies = () => {
   )
 
   const puppiesHeader = () => (
-    <Typography variant="h3" component="h2" gutterBottom>
+    <Typography variant="h3" component="h2" gutterBottom color="textPrimary">
       Puppies
     </Typography>
   )
