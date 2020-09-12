@@ -4,4 +4,5 @@ export type Puppy = {
   breed: string
   age: number
   owner_id: number | null
+  owner: Owner | null
 }

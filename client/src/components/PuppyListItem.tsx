@@ -24,7 +24,7 @@ interface PuppyListItemProps {
 }
 
 export const PuppyListItem = (props: PuppyListItemProps) => {
-  const { id, name, breed, age, owner_id } = props.puppy
+  const { id, name, breed, age, owner_id, owner } = props.puppy
 
   const classes = useStyles()
   const [editing, setEditing] = useState(false)
@@ -53,6 +53,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
         breed: newPupBreed,
         age: newPupAge,
         owner_id: newPupOwner,
+        owner: null,
       },
       idx
     )
@@ -153,7 +154,9 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
       <TableCell align="right">{name}</TableCell>
       <TableCell align="right">{breed}</TableCell>
       <TableCell align="right">{age}</TableCell>
-      <TableCell align="right">{owner_id}</TableCell>
+      <TableCell align="right">
+        {owner.first_name} {owner.last_name}
+      </TableCell>
       <TableCell align="right">
         <Fab
           size="small"
