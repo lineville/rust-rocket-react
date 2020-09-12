@@ -1,5 +1,5 @@
 import { Card } from '../Card'
-export const cards: Card[] = [
+export const Cards: Card[] = [
   {
     id: 1,
     header: 'Liam',
