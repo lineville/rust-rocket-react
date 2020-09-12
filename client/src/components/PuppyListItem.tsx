@@ -13,7 +13,7 @@ import {
   MenuItem,
 } from '@material-ui/core'
 import { OwnerWithPuppies } from '../OwnerWithPuppy'
-import { getOwners } from '../services/OwnersService'
+import { getOwnersAndPuppies } from '../services/OwnersService'
 
 interface PuppyListItemProps {
   puppy: Puppy
@@ -36,7 +36,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
 
   // * Gets all the puppies asynchronously whenever skip or take is modified
   const fetchOwners = useCallback(async () => {
-    const owners = await getOwners()
+    const owners = await getOwnersAndPuppies()
     setOwners(owners)
   }, [])
 
