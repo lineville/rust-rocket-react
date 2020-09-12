@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Puppy } from '../Puppy'
 import { Delete, Edit, Cancel, Check, FileCopy } from '@material-ui/icons'
 import {
@@ -12,6 +12,8 @@ import {
   Select,
   MenuItem,
 } from '@material-ui/core'
+import { OwnerWithPuppies } from '../OwnerWithPuppy'
+import { getOwners } from '../services/OwnersService'
 
 interface PuppyListItemProps {
   puppy: Puppy
@@ -30,6 +32,17 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
   const [newPupBreed, setNewPupBreed] = useState(breed)
   const [newPupAge, setNewPupAge] = useState(age)
   const [newPupOwner, setNewPupOwner] = useState(owner_id)
+  const [owners, setOwners] = useState<Array<OwnerWithPuppies>>([])
+
+  // * Gets all the puppies asynchronously whenever skip or take is modified
+  const fetchOwners = useCallback(async () => {
+    const owners = await getOwners()
+    setOwners(owners)
+  }, [])
+
+  useEffect(() => {
+    fetchOwners()
+  }, [fetchOwners])
 
   // * Updates the pup
   const savePup = async (idx: number) => {
@@ -102,9 +115,11 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
             setNewPupOwner(parseInt((e.target as HTMLInputElement).value, 10))
           }
         >
-          <MenuItem value={1}>Liam</MenuItem>
-          <MenuItem value={2}>Linda</MenuItem>
-          <MenuItem value={3}>Mom & Dad</MenuItem>
+          {owners?.map((owner) => (
+            <MenuItem value={owner.id}>
+              {owner.first_name} {owner.last_name}
+            </MenuItem>
+          ))}
         </Select>
       </TableCell>
 

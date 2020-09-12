@@ -2,8 +2,6 @@ import axios from 'axios'
 import { Puppy } from '../Puppy'
 import { NewPuppy } from '../NewPuppy'
 
-console.log(process.env.REACT_APP_API_PATH)
-
 const API_PATH =
   process.env.REACT_APP_API_PATH + '/puppies' ||
   'http://localhost:8000/api/puppies'

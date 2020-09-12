@@ -1,10 +1,9 @@
 import axios from 'axios'
-import process from 'process'
 import { OwnerWithPuppies } from '../OwnerWithPuppy'
 
 const API_PATH =
-  process.env.REACT_APP_API_PATH + '/owners' ||
-  'http://localhost:8000/api/owners'
+  process.env.REACT_APP_API_PATH + '/owners-and-puppies' ||
+  'http://localhost:8000/api/owners-and-puppies'
 
 // * Gets the owners
 export const getOwners = async (): Promise<Array<OwnerWithPuppies>> => {
