@@ -8,7 +8,7 @@ const API_PATH = process.env.REACT_APP_API_PATH || 'http://localhost:8000/api'
 export const getOwnersAndPuppies = async (): Promise<
   Array<OwnerWithPuppies>
 > => {
-  const response = await axios.get(`${API_PATH}/owners-and-puppies`)
+  const response = await axios.get(`${API_PATH}/owners`)
   return response.data
 }
 

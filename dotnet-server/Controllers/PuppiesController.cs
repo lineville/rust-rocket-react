@@ -24,10 +24,10 @@ namespace dotnet_server.Controllers
 
     [HttpGet]
     [Route("")]
-    public IActionResult GetPuppies([FromQuery] int? skip, [FromQuery] int? take)
+    public IEnumerable<Puppy> GetPuppies([FromQuery] int skip = 0, [FromQuery] int take = Int32.MaxValue)
     {
       var puppies = _puppiesRepository.GetPuppies(skip, take);
-      return Ok(puppies);
+      return puppies;
     }
 
     [HttpGet]
@@ -35,6 +35,30 @@ namespace dotnet_server.Controllers
     public Puppy GetPuppy(int id)
     {
       var pup = _puppiesRepository.GetPuppy(id);
+      return pup;
+    }
+
+    [HttpPost]
+    [Route("")]
+    public Puppy CreatePuppy([FromBody] Puppy puppy)
+    {
+      var pup = _puppiesRepository.CreatePuppy(puppy);
+      return pup;
+    }
+
+    [HttpPut]
+    [Route("")]
+    public Puppy UpdatePuppy([FromBody] Puppy puppy)
+    {
+      var pup = _puppiesRepository.UpdatePuppy(puppy);
+      return pup;
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public Puppy DeletePuppy(int id)
+    {
+      var pup = _puppiesRepository.DeletePuppy(id);
       return pup;
     }
   }

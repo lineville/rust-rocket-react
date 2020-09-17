@@ -25,7 +25,7 @@ import { pageSizeOptions, headings } from '../constants/Puppies'
 
 const Puppies = () => {
   const [puppies, setPuppies] = useState<Array<Puppy>>([])
-  const [take, setTake] = useState(10)
+  const [take, setTake] = useState(5)
   const [skip, setSkip] = useState(0)
 
   // * Gets all the puppies asynchronously whenever skip or take is modified
@@ -40,7 +40,7 @@ const Puppies = () => {
 
   // * Adds a new pup
   const addPup = async (pup: NewPuppy) => {
-    const newPup = await createPuppy(pup)
+    const newPup = await createPuppy({ id: 0, owner: null, ...pup })
     setPuppies([...puppies, newPup])
   }
 
@@ -59,8 +59,15 @@ const Puppies = () => {
   }
 
   // * Copies pup and creates a new one
-  const copyPup = async ({ name, breed, age, owner_id }: Puppy) => {
-    const copiedPuppy = await createPuppy({ name, breed, age, owner_id })
+  const copyPup = async ({ name, breed, age, owner_id, owner }: Puppy) => {
+    const copiedPuppy = await createPuppy({
+      id: 0,
+      name,
+      breed,
+      age,
+      owner_id,
+      owner: { ...owner },
+    })
     setPuppies([...puppies, copiedPuppy])
   }
 

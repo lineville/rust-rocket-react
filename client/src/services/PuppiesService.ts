@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Puppy } from '../Puppy'
-import { NewPuppy } from '../NewPuppy'
 
 const API_PATH =
   process.env.REACT_APP_API_PATH + '/puppies' ||
@@ -22,7 +21,7 @@ export const getPuppy = async (id: number): Promise<Puppy> => {
 }
 
 // * Creates a new puppy with given name, age and breed
-export const createPuppy = async (pup: NewPuppy): Promise<Puppy> => {
+export const createPuppy = async (pup: Puppy): Promise<Puppy> => {
   const response = await axios.post(API_PATH, pup)
   return response.data
 }

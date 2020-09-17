@@ -35,6 +35,7 @@ namespace dotnet_server
       });
 
       services.AddScoped<IPuppiesRepository, PuppiesRepository>();
+      services.AddScoped<IOwnersRepository, OwnersRepository>();
       services.AddDbContext<PuppiesContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
       services.AddCors(options =>
@@ -42,7 +43,10 @@ namespace dotnet_server
          options.AddDefaultPolicy(
             builder =>
             {
-              builder.WithOrigins("http://localhost:3000", "http://localhost:5001");
+              builder.WithOrigins("http://localhost:3000", "http://localhost:5001")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
             });
        });
     }

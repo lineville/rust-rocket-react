@@ -155,7 +155,7 @@ export const PuppyListItem = (props: PuppyListItemProps) => {
       <TableCell align="right">{breed}</TableCell>
       <TableCell align="right">{age}</TableCell>
       <TableCell align="right">
-        {owner.first_name} {owner.last_name}
+        {owner?.first_name} {owner?.last_name}
       </TableCell>
       <TableCell align="right">
         <Fab

@@ -16,7 +16,6 @@ namespace dotnet_server
     {
     }
 
-    public virtual DbSet<DieselSchemaMigrations> DieselSchemaMigrations { get; set; }
     public virtual DbSet<Owner> Owners { get; set; }
     public virtual DbSet<Puppy> Puppies { get; set; }
 
@@ -30,22 +29,6 @@ namespace dotnet_server
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<DieselSchemaMigrations>(entity =>
-      {
-        entity.HasKey(e => e.Version)
-                  .HasName("__diesel_schema_migrations_pkey");
-
-        entity.ToTable("__diesel_schema_migrations");
-
-        entity.Property(e => e.Version)
-                  .HasColumnName("version")
-                  .HasMaxLength(50);
-
-        entity.Property(e => e.RunOn)
-                  .HasColumnName("run_on")
-                  .HasDefaultValueSql("CURRENT_TIMESTAMP");
-      });
-
       modelBuilder.Entity<Owner>(entity =>
       {
         entity.ToTable("owners");
